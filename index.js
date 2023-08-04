@@ -1,5 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const axios = require('axios');
+
 const app = express();
 
 // กำหนด port ที่ Vercel ให้ใช้
@@ -7,6 +9,10 @@ const port = process.env.PORT || 3000;
 
 // Middleware เพื่อ parse body ที่ส่งมาจาก LINE
 app.use(bodyParser.json());
+
+// เพิ่ม LINE Channel Access Token และ Channel Secret ของคุณที่นี่
+const channelAccessToken = 'HLpLP0BAjBljAMh5ApFaSJAMlbB0eGEv57WoMFGyGustSinJL6o02HZU+2C8jMdL1ZKOgPUnvYPguuPJ5pjeIPa/LVr/JZPUOcVqlkKbXZdevBtbklDB4Rrkg+WEqPFHfgzvGQZpeGspQCbBYPK5KAdB04t89/1O/w1cDnyilFU=';
+const channelSecret = '8945b42f1b86bea748e544945320b2f4';
 
 // เมื่อมีการเรียก webhook จาก LINE
 app.post('/webhook', (req, res) => {
@@ -35,10 +41,9 @@ app.post('/webhook', (req, res) => {
 
 // Function สำหรับส่งลิ้งรูปกลับไปยัง LINE
 function replyWithImage(replyToken, imageUrl) {
-  const axios = require('axios');
   const headers = {
     'Content-Type': 'application/json',
-    'Authorization': `8945b42f1b86bea748e544945320b2f4` // เปลี่ยน YOUR_CHANNEL_ACCESS_TOKEN เป็นค่าจาก LINE Channel
+    'Authorization': `Bearer ${channelAccessToken}`
   };
   const data = {
     replyToken,
